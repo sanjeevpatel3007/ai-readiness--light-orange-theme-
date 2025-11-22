@@ -33,41 +33,20 @@ const QUESTION_META: Record<string, { label: string, icon: any }> = {
 
 // --- Background Components ---
 
-const GradientMesh = () => {
+const BackgroundPattern = () => {
   return (
-    <div className="absolute inset-0 overflow-hidden pointer-events-none">
-       {/* Base warm gradient */}
-       <div className="absolute inset-0 bg-gradient-to-br from-orange-50 via-white to-red-50 opacity-80" />
-       
-       {/* Moving Orbs - Slowed down for subtlety */}
-       <motion.div 
-         animate={{ 
-           x: [-50, 50, -50],
-           y: [-30, 30, -30],
-           rotate: [0, 180, 360],
-           scale: [1, 1.1, 1]
-         }}
-         transition={{ duration: 35, repeat: Infinity, ease: "linear" }}
-         className="absolute top-0 left-1/4 w-[600px] h-[600px] bg-orange-200/20 rounded-full blur-[120px] mix-blend-multiply"
-       />
-       <motion.div 
-         animate={{ 
-           x: [50, -50, 50],
-           y: [30, -30, 30],
-           rotate: [360, 180, 0],
-           scale: [1.1, 1, 1.1]
-         }}
-         transition={{ duration: 40, repeat: Infinity, ease: "linear" }}
-         className="absolute bottom-0 right-1/4 w-[700px] h-[700px] bg-red-200/20 rounded-full blur-[120px] mix-blend-multiply"
-       />
-       <motion.div 
-         animate={{ 
-           x: [-30, 30, -30],
-           y: [60, -60, 60],
-         }}
-         transition={{ duration: 45, repeat: Infinity, ease: "easeInOut" }}
-         className="absolute top-1/2 left-1/2 w-[500px] h-[500px] bg-yellow-100/30 rounded-full blur-[100px] mix-blend-multiply"
-       />
+    <div className="absolute inset-0 overflow-hidden pointer-events-none bg-[#FDF8F3]">
+       <svg className="absolute w-full h-full opacity-[0.03]" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <pattern id="grid-pattern" width="40" height="40" patternUnits="userSpaceOnUse">
+              <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#000" strokeWidth="1"/>
+            </pattern>
+          </defs>
+          <rect width="100%" height="100%" fill="url(#grid-pattern)" />
+       </svg>
+       {/* Subtle gradients */}
+       <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-orange-50/50 to-transparent" />
+       <div className="absolute bottom-0 right-0 w-1/2 h-1/2 bg-gradient-to-t from-orange-100/20 to-transparent rounded-full blur-3xl" />
     </div>
   );
 };
@@ -251,7 +230,7 @@ function App() {
   return (
     <div className="min-h-[100dvh] bg-[#FDF8F3] text-gray-900 font-sans overflow-hidden relative flex items-center justify-center md:p-4 selection:bg-orange-200">
       
-      <GradientMesh />
+      <BackgroundPattern />
 
       {/* --- Gamification Overlays --- */}
       <AnimatePresence>
@@ -274,24 +253,6 @@ function App() {
         {screen === 'intro' && (
           <div className="flex-1 flex flex-col items-center justify-center relative overflow-hidden p-6 md:p-12">
             
-            {/* Background SVG Pattern for Texture */}
-            <div className="absolute inset-0 pointer-events-none opacity-[0.4]">
-                 <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
-                    <defs>
-                        <pattern id="hero-grid" width="40" height="40" patternUnits="userSpaceOnUse">
-                            <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#E5E7EB" strokeWidth="0.5" />
-                        </pattern>
-                        <linearGradient id="fade-grad" x1="0%" y1="0%" x2="0%" y2="100%">
-                            <stop offset="0%" stopColor="white" stopOpacity="0" />
-                            <stop offset="50%" stopColor="white" stopOpacity="1" />
-                            <stop offset="100%" stopColor="white" stopOpacity="0" />
-                        </linearGradient>
-                    </defs>
-                    <rect width="100%" height="100%" fill="url(#hero-grid)" />
-                 </svg>
-                 <div className="absolute inset-0 bg-gradient-to-b from-transparent via-white/50 to-white" />
-            </div>
-
             <div className="relative z-20 w-full max-w-4xl mx-auto flex flex-col items-center text-center">
                
                {/* Badge */}
@@ -457,12 +418,16 @@ function App() {
                 <div className="flex-1 overflow-y-auto custom-scrollbar p-6 md:p-12 flex flex-col justify-start md:justify-center">
                     <AnimatePresence mode="wait">
                         <motion.div
-                        key={currentQIndex}
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={shakeKey ? { x: [0, -10, 10, -10, 10, 0], opacity: 1, y: 0 } : { opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: -20 }}
-                        transition={{ duration: 0.4 }}
-                        className="w-full max-w-3xl mx-auto pb-20 md:pb-0" // Add padding bottom for mobile so content isn't covered by sticky nav if it overlays
+                          key={currentQIndex}
+                          initial={{ opacity: 0, y: 20 }}
+                          animate={{ 
+                            opacity: 1, 
+                            y: 0,
+                            x: shakeKey ? [0, -10, 10, -10, 10, 0] : 0
+                          }}
+                          exit={{ opacity: 0, y: -20 }}
+                          transition={{ duration: 0.4 }}
+                          className="w-full max-w-3xl mx-auto pb-20 md:pb-0"
                         >
                             {renderQuestion()}
                         </motion.div>

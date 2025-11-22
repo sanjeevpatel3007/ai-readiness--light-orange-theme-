@@ -2,7 +2,8 @@
 import { GoogleGenAI, Type } from "@google/genai";
 import { UserAnswers, GeminiRoadmap } from "../types";
 
-const ai = new GoogleGenAI({ apiKey: process.env.API_KEY || '' });
+// Fix: Use process.env.API_KEY as per guidelines and to resolve ImportMeta error
+const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
 
 export async function generateRoadmap(
   answers: UserAnswers,
@@ -22,12 +23,19 @@ export async function generateRoadmap(
     Your goal is to provide a structured, professional report that guides them from their current role to an AI-enhanced version of that role.
     
     Crucial Requirements:
-    1. **roleTitle**: Combine their role and experience (e.g., "Data Analyst (3-4 Years Experience)").
+    1. **roleTitle**: Combine their role and experience (e.g., "Data Analyst (3–4 Years Experience)").
     2. **profileSummary**: A professional summary of who they are and their ambition.
-    3. **currentState**: Explain where they are now and what they need to do next to bridge the gap to AI.
-    4. **careerPath**: Define a path from their current role (e.g., "Data Analyst") to a future AI role (e.g., "AI Automation Specialist") with 4 milestones.
-    5. **launchPadCurriculum**: Create a 6-8 week learning path (Weeks 1, 2, 4, 5, 6) focusing on specific skills like "Automate Workflows", "Build Assistants", "Dashboards", "Prototyping".
-    6. **exampleProjects**: 4 specific, high-value projects they should build.
+    3. **currentState**: This section is titled "Where You Are & What You Can Do Next". Explain where they are now and what they need to do next to bridge the gap to AI.
+    4. **progressSteps**: A list of actionable next steps (e.g., "Start automating repetitive data tasks", "Build dashboards").
+    5. **frameworks**: A list of "Frameworks & Tools to Supercharge Your Growth". Include brief descriptions (e.g., "Automate Product Workflows with AI – streamline repetitive analysis tasks").
+    6. **exampleProjects**: 4 specific, high-value projects they should build. Title and Description.
+    7. **estimatedTime**: e.g., "With professional guidance, you could build 5+ meaningful projects... within 8 weeks".
+    8. **careerPath**: Define a path from their current role to a future AI role.
+       - from: Current Role
+       - to: Target AI Role
+       - milestones: 4 checklist items (e.g., "Build 5+ hands-on AI projects", "Learn practical agent workflows").
+    9. **launchPadCurriculum**: Create a 6-8 week learning path (Weeks 1, 2, 4, 5, 6) focusing on specific skills like "Automate Workflows", "Build Assistants", "Dashboards", "Prototyping".
+    10. **summaryQuote**: A final motivating summary paragraph.
     
     Tone: Professional, encouraging, authoritative, and highly actionable.
   `;
@@ -101,41 +109,43 @@ export async function generateRoadmap(
     return {
       roleTitle: "Professional (AI Explorer)",
       profileSummary: "You are a professional looking to upgrade your skills and leverage AI for career growth.",
-      currentState: "You have a solid foundation but need to bridge the gap between your current expertise and AI-driven automation.",
+      currentState: "Right now, you have solid skills and some exposure to AI tools. Your next step is to bridge the gap between your current expertise and AI-driven automation.",
       progressSteps: [
         "Automate repetitive tasks using AI",
         "Build dashboards & insights that dynamically update",
-        "Experiment with AI prototypes"
+        "Experiment with AI prototypes for business processes",
+        "Leverage AI tools to accelerate your workflow"
       ],
       frameworks: [
-        "Automate Workflows with AI",
-        "Build AI Assistants",
-        "Design AI-Driven Dashboards"
+        "Automate Product Workflows with AI – streamline repetitive analysis tasks",
+        "Build AI Assistants for Data Insights – create agents that summarize trends",
+        "Design AI-Driven Dashboards & Analytics – integrate AI predictions",
+        "Prototype AI Products – build functional mini-projects"
       ],
       exampleProjects: [
-        { title: "AI Dashboard", description: "Build a dynamic dashboard that tracks key metrics automatically." },
-        { title: "Data Assistant", description: "Create an AI assistant that suggests actionable insights." },
-        { title: "Predictive Model", description: "Prototype a model to forecast trends." },
-        { title: "Automated Workflows", description: "Set up automation pipelines for reporting." }
+        { title: "AI Dashboard with KPI Tracking", description: "Build a dynamic dashboard using Streamlit or Excel AI that tracks key metrics." },
+        { title: "Data Assistant for Insights", description: "Create an AI assistant that suggests actionable insights from raw datasets." },
+        { title: "Predictive Model", description: "Prototype a model using PandasAI to forecast trends." },
+        { title: "Automated Workflows", description: "Set up automation pipelines to handle repetitive reporting." }
       ],
-      estimatedTime: "With professional guidance, you could build 5+ meaningful projects in 8 weeks.",
+      estimatedTime: "With professional guidance, you could build 5+ meaningful projects and see measurable career impact within 8 weeks.",
       careerPath: {
         from: "Current Professional",
         to: "AI Power User",
         milestones: [
-          "Build AI dashboards",
-          "Learn agent workflows",
-          "Create automation portfolio",
-          "Position for AI roles"
+          "Build 5+ hands-on AI projects relevant to your role",
+          "Learn practical agent workflows used in top AI companies",
+          "Create a portfolio that shows measurable automation outcomes",
+          "Position yourself for AI Data Engineer or Automation roles"
         ]
       },
       launchPadCurriculum: [
         { week: "Week 2", title: "Build AI Assistants", description: "Create agents that generate actionable insights." },
         { week: "Week 4", title: "Automate Workflows", description: "Streamline repetitive tasks and boost efficiency." },
         { week: "Week 5", title: "Prototype AI Products", description: "Turn ideas into functional AI prototypes quickly." },
-        { week: "Week 6", title: "Deploy Solutions", description: "Test, measure, and optimize AI solutions." }
+        { week: "Week 6", title: "Deploy Solutions", description: "Test, measure, and optimize AI solutions for maximum impact." }
       ],
-      summaryQuote: "With your background, you are perfectly positioned to step into AI-driven automation. The next stage is hands-on building."
+      summaryQuote: "With your background, you are perfectly positioned to step into AI-driven automation. The next stage of your journey is hands-on — building AI agents that analyze data, generate reports, and power decision-making."
     };
   }
 }
